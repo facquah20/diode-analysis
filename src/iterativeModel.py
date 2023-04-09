@@ -10,7 +10,11 @@
 
 #formula V2=v1+2.3*n*Vt*log(I2/I1);
 import math
+import matplotlib.pyplot as plt 
 
+
+current = [] #keeps the current value of each iteration
+voltage = [] #keeps the voltage across the diode for each iteration
 
 #displays information about the model to the screen
 def information():
@@ -41,7 +45,6 @@ def iterative_model(emf,diode_voltagedrop,diode_current,ex_resistance
     next_iteration_voltage = 0
 
     #prev_next_voltage_difference = abs(prev_iteration_voltage - next_iteration_voltage)
-
     while(True):
         temp_voltage = diode_voltagedrop
         if round(prev_iteration_voltage,4) == round(next_iteration_voltage,4):
@@ -51,11 +54,13 @@ def iterative_model(emf,diode_voltagedrop,diode_current,ex_resistance
         # get the current flowing through the circuit 
             new_current = (emf-diode_voltagedrop)/ex_resistance
             print("iteration {0}=> current flowing through diode {1}A\n".format(iteration_count+1,new_current))
+            current.append(new_current)
 
         #calculates the new voltage drop across the diode
             diode_voltagedrop = diode_voltagedrop + const_term * math.log10(new_current/diode_current)
 
             print("iteration {0} => voltage drop across diode : {1}V\n".format(iteration_count+1,diode_voltagedrop))
+            voltage.append(diode_voltagedrop)
             print("------------------------------------------------------------------\n\n")
             diode_current=new_current
             next_iteration_voltage = diode_voltagedrop
@@ -67,8 +72,13 @@ def iterative_model(emf,diode_voltagedrop,diode_current,ex_resistance
 
 information() 
 
+
 try:
     request_for_parameters()
+    plt.plot(current,voltage)
+    plt.xlabel("Current")
+    plt.ylabel("voltage")
+    plt.show()
 except ValueError:
     print("The iteration could not continue because log of a negative number is invalid\n")
     print("You may have entered a string or a letter as part of the parameters!")
