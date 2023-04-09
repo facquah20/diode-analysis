@@ -9,6 +9,16 @@
 #It can also be used to determine the current flowing
 
 #formula V2=v1+2.3*n*Vt*log(I2/I1);
+
+"""
+The matplot library was used to analyse the ouputs in the console
+graphically. It was observed that the area which is more dense 
+is where the voltage across the diode remains nearly the same .
+
+The iteration stops if the parameters provided detects a negative
+current across the diode. This implies that the diode is open or in a 
+reverse-bias mode.
+"""
 import math
 import matplotlib.pyplot as plt 
 
@@ -75,7 +85,7 @@ information()
 
 try:
     request_for_parameters()
-    plt.plot(current,voltage)
+    plt.scatter(current,voltage)
     plt.xlabel("Current")
     plt.ylabel("voltage")
     plt.show()
